@@ -1,0 +1,77 @@
+{
+  "name": "agent_npu_hchang",
+  "image": "agent_npu_cann:8.5.0_hchang",
+
+  "workspaceMount": "source=${localEnv:HOME}/repos,target=/root/repos,type=bind",
+  "workspaceFolder": "/root/repos",
+
+  "runArgs": [
+    "--ipc=host",
+    "--privileged",
+    "--device=/dev/davinci0",
+    "--device=/dev/davinci1",
+    "--device=/dev/davinci2",
+    "--device=/dev/davinci3",
+    "--device=/dev/davinci4",
+    "--device=/dev/davinci5",
+    "--device=/dev/davinci6",
+    "--device=/dev/davinci7",
+    "--device=/dev/davinci_manager",
+    "--device=/dev/devmm_svm",
+    "--device=/dev/hisi_hdc"
+  ],
+
+  "mounts": [
+    "type=bind,source=/usr/local/bin/npu-smi,target=/usr/local/bin/npu-smi,readonly",
+    "type=bind,source=/usr/local/Ascend/driver,target=/usr/local/Ascend/driver,readonly",
+    "type=bind,source=/etc/ascend_install.info,target=/etc/ascend_install.info,readonly",
+
+    "type=bind,source=${localEnv:HOME}/.tmux.conf,target=/root/.tmux.conf,readonly",
+    "type=bind,source=${localEnv:HOME}/.codex,target=/root/.codex",
+    "type=bind,source=${localEnv:HOME}/.copilot,target=/root/.copilot",
+    "type=bind,source=${localEnv:HOME}/.claude,target=/root/.claude"
+  ],
+
+  "postStartCommand": "tmux new-session -d -s main || true",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "openai.chatgpt",
+        "Anthropic.claude-code",
+        "ms-vscode.cpptools",
+        "ms-vscode.cpptools-extension-pack",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.vscode-jupyter-cell-tags",
+        "ms-toolsai.jupyter-renderers",
+        "ms-toolsai.vscode-jupyter-slideshow",
+        "koehlma.markdown-math",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-python.vscode-python-envs",
+        "mechatroner.rainbow-csv",
+        "ms-vscode.cpptools-themes",
+        "ms-toolsai.jupyter-keymap",
+        "DavidAnson.vscode-markdownlint",
+        "GitHub.codespaces",
+        "ms-vscode.cpp-devtools",
+        "esbenp.prettier-vscode",
+        "James-Yu.latex-workshop"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "tmux": {
+            "path": "bash",
+            "args": [
+              "-lc",
+              "tmux new-session -A -s main"
+            ],
+            "overrideName": true
+          }
+        }
+      }
+    }
+  }
+}
